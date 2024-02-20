@@ -1,15 +1,11 @@
-import numpy as np
-from scipy.linalg.sqrtm
+from flask import Flask, request
 
-A = np.array([[1, -2, 3, 5],
-              [2, 2, -1, 0],
-              [3, 0, 1, 2],
-              [1, 0, 2, 0]])
-print(np.linalg.matrix_rank(A))
-b
-B = np.array([
-    [1,-2],
-    [2,2]
-])
-sqrtB = np.sqrtm(B)
-print(sqrtB)
+app = Flask(__name__)
+
+@app.route('/api', methods=['GET'])
+def sendData():
+    Query = str(request.args['Query'])
+    return Query
+
+if __name__ == '__main__':
+    app.run()
