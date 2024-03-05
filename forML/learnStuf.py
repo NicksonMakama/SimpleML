@@ -31,7 +31,7 @@ y_train = np.int16(mnist_ds.target[:50000])
 y_test = np.int16(mnist_ds.target[50000:])
 
 #training
-mlpc = MLPClassifier(hidden_layer_sizes=(120), learning_rate_init=0.1, batch_size=512, max_iter=250, solver='adam', verbose=True) 
+mlpc = MLPClassifier(hidden_layer_sizes=(120, 60), learning_rate_init=0.1, batch_size=512, max_iter=250, solver='adam', verbose=True) 
 # jus 1 layer wit 1200 neurons eg (120, 60) 2 layer 120 nuron & 60 nuron , max-iter is no of Iteratn, batchSize is hw many data to use in each iter, solver is the optimzt algo, 
 #verbose true to tell  us info about traing
 mlpc.fit(x_train, y_train)
