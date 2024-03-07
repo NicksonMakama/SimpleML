@@ -5,7 +5,7 @@ import numpy as np
 cancer = load_breast_cancer()
 x_train, x_test, y_train, y_test = train_test_split(cancer.data,cancer.target, stratify = cancer.target, test_size = 0.2, random_state = 42)
 
-class LogisticNeuron:
+class DualLayer:
     
     def forpass(self, x):
         z1 = np.dot(x * self.w1) + self.b1
@@ -73,11 +73,33 @@ class RandomInitNetwrok(DualLayer):
 class MinibatchNetwork(RandomInitNetwrok):
     def __init__(self, units=10, batch_size=32, learning_rate = 0.1, l1=0, l2=0):
         super().__init__(units, learning_rate, l1, l2)
-        self.batch_size = batch_size #3.11.15
+        self.batch_size = batch_size 
+    
+    def fit(self, x, y, epochs=100, x_val =None, y_val=None):
+        y = y.reshape(-1, 1)
+        self.init_weights(x.shape[1])
+        np.random.seed(42)
+        for i in range(epochs):
+            loss = 0
+            for x_batch, y_batch in self.gen_batch(x,y):
+                y_batch = y_batch.reshape(-1,1)
+                m = len(x_batch)
+                a = self.training(x_batch, y_batch, m)
+    def gen_batch(self, x,y):
+        length = len(x)
+        bins = length // self.batch_size
+        if length % self.batch_size:
+            bins +=1
+        indexes = np.random.permutation(np.arange(len(x)))
+        x = x[indexes]
+        y = y[indexes]
+        for i in range(bins):
+            start = self.batch_size * 1
+            end = self.batch_size * (1 + 1)
+            yield x[start:end], y[start:end]
 
-
-singleLaywitLoss = LogisticNeuron()
-singleLaywitLoss.fit(x_train, y_train)
+minibatch_net = MinibatchNetwork(l2=0.01, batch_size=32)
+minibatch_net.fit(x_train_scaled, y_train, x_train, x_val = x_val_scaled, y_val=y_val, epochs=500)
 print(singleLaywitLoss.score(x_test, y_test))
 #accuracy = np.mean(runReg.predict(x_test) == y_test)
 #print(f"Accu: {np.int16(accuracy * 100)}%")
